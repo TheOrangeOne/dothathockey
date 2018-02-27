@@ -1,0 +1,18 @@
+#lang racket
+
+(require scribble/html/html)
+(require scribble/html/xml)
+
+(provide make-page
+         output-page)
+
+(define-struct page (src fn))
+
+
+(define (output-page page)
+  (define filename (page-fn page))
+  (define source (page-src page))
+  (define file (open-output-file filename #:exists 'replace))
+  (output-xml (doctype 'html) file)
+  (output-xml source file)
+  (close-output-port file))
