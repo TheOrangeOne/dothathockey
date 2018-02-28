@@ -33,7 +33,7 @@
 (define good-games (filter is-good-game? games))
 
 
-(define fn "today.html")
+(define fn "build/today.html")
 (define src (body (h1 "Today's games:")
                   (html-games games)
                   (h1 "Good games:")
