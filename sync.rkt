@@ -9,7 +9,6 @@
 
 (define SEASON-START "2017-10-04")
 
-
 (define (parse-teams lteams [hteams (make-immutable-hash)])
   (if (empty? lteams)
     hteams
@@ -31,8 +30,6 @@
 (define teams-file-out (open-output-file teams-file-name #:exists 'replace))
 (write-json teams teams-file-out)
 (close-output-port teams-file-out)
-
-
 
 (define sched-file-name "data/sched.json")
 (close-output-port (open-output-file sched-file-name #:exists 'append))
@@ -69,8 +66,8 @@
   (define part-sched (hash-ref part 'dates empty))
   (merge-sched cached-sched part-sched))
 
-;(define schedule (update-sched cached-sched))
-(define schedule cached-sched)
+(define schedule (update-sched cached-sched))
+; (define schedule cached-sched)
 
 ; output the schedule to file
 (define sched-file-out (open-output-file sched-file-name #:exists 'replace))

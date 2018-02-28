@@ -8,7 +8,7 @@
 (define-struct page (src fn))
 
 (define meta-mobile
-  (element 'meta 'name: "viewport" 'content: "width=device-width, initial-scale=1"))
+  (element 'meta 'name: "viewport" 'content: "width=device-width,initial-scale=1"))
 
 (define (wrap-src src header)
   (element 'html 'lang: "en"
