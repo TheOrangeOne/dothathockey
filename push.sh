@@ -2,6 +2,7 @@
 SITE_BRANCH=gh-pages
 
 git checkout $SITE_BRANCH
+rm *.html
 git checkout master
 
 racket dth.rkt
