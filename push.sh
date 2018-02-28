@@ -5,8 +5,6 @@ git checkout $SITE_BRANCH
 rm *.html
 git checkout master
 
-racket dth.rkt
-
 git checkout $SITE_BRANCH
 mv build/*.html .
 cp today.html index.html # temporary
