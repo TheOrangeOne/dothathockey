@@ -1,4 +1,4 @@
-language: c
+language: generic
 sudo: false
 env:
   global:
@@ -11,6 +11,8 @@ before_install:
 - git clone https://github.com/greghendershott/travis-racket.git
 - cat travis-racket/install-racket.sh | bash
 - export PATH="${RACKET_DIR}/bin:${PATH}"
+script:
+- echo "no script"
 cache:
   directories:
     - data/
