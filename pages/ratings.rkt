@@ -1,6 +1,7 @@
 #lang racket
 
 (require scribble/html/html)
+(require scribble/html/xml)
 (require "../page.rkt")
 (require "../rating.rkt")
 (require "../date.rkt")
@@ -13,7 +14,10 @@
   (li (span rating nbsp (b abbr))))
 
 (define (html-ratings data)
-  (ul (map html-rating data)))
+  (element
+    'ul
+    'style: "font-family: \"Lucida Console\", Monaco, monospace"
+    (map html-rating data)))
 
 (define fn "ratings")
 (define src (div (h1 (~a "[" todayf "]" " ratings"))

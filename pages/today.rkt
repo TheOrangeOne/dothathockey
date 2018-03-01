@@ -1,17 +1,20 @@
 #lang racket
 
 (require scribble/html/html)
+(require scribble/html/xml)
 (require "../page.rkt")
 (require "../stores/today.rkt")
 
 (provide today-page)
 
 (define (html-game game)
-  (define home-team (first game))
-  (define away-team (second game))
-  (li (~a (hash-ref away-team 'name) " at " (hash-ref home-team 'name))))
+  (li (~a (first game) " at " (second game))))
 
-(define (html-games games) (ul (map html-game games)))
+(define (html-games games)
+  (element
+    'ul
+    'style: "font-family: \"Lucida Console\", Monaco, monospace"
+    (map html-game games)))
 
 ; (define (is-good-game? game)
 ;   (define homeid (hash-ref (first game) 'id))

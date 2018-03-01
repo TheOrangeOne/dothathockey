@@ -2,6 +2,7 @@
 
 (require json)
 (require "../sync.rkt")
+(require "../team.rkt")
 
 (provide games)
 
@@ -28,12 +29,5 @@
 
 ; (define (is-top-team? id) (member id top-teams))
 
-(define (get-game game)
-  (define teams (hash-ref game 'teams))
-  (define home (hash-ref teams 'home))
-  (define home-team (hash-ref home 'team))
-  (define away (hash-ref teams 'away))
-  (define away-team (hash-ref away 'team))
-  (list home-team away-team))
 
-(define games (map get-game today-games))
+(define games (map get-abbrs today-games))

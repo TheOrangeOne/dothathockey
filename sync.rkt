@@ -5,9 +5,16 @@
 (require "api.rkt")
 (require "date.rkt")
 
-(provide schedule teams)
+(provide schedule teams id->js)
 
 (define SEASON-START "2017-10-04")
+
+(define (id->js id)
+  (cond [(symbol? id) id]
+        [(number? id)
+         (string->symbol (number->string id))]
+        [(string? id)
+         (string->symbol id)]))
 
 (define (parse-teams lteams [hteams (make-immutable-hash)])
   (if (empty? lteams)

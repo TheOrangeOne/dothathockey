@@ -9,13 +9,6 @@
 (define-struct match  (home away res) #:transparent)
 (define-struct rating (id rating gp)  #:transparent)
 
-(define (id->js id)
-  (cond [(symbol? id) id]
-        [(number? id)
-         (string->symbol (number->string id))]
-        [(string? id)
-         (string->symbol id)]))
-
 (define (format-rating rating)
   (real->decimal-string (/ rating 100) 3))
 
