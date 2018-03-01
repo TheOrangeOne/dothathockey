@@ -61,7 +61,6 @@
   (define prep-sched (if (empty? cached-sched) empty (rest cached-sched)))
   (define schedule-params
     (~a "?startDate=" start-date "&" "endDate=" end-date "&expand=schedule.linescore"))
-  (displayln schedule-params)
   (define part (nhl-get (string-append "schedule" schedule-params)))
   (define part-sched (hash-ref part 'dates empty))
   (merge-sched cached-sched part-sched))

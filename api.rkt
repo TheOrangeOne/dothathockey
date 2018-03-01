@@ -10,6 +10,7 @@
 (define api-base "https://statsapi.web.nhl.com/api/v1/")
 
 (define (nhl-get endpoint)
+  (displayln (~a "GET" endpoint))
   (define-values (status header resp)
     (http-sendrecv/url (string->url (string-append api-base endpoint))
                        #:method "GET"
