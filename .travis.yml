@@ -11,9 +11,13 @@ before_install:
 - git clone https://github.com/greghendershott/travis-racket.git
 - cat travis-racket/install-racket.sh | bash
 - export PATH="${RACKET_DIR}/bin:${PATH}"
-script:
+cache:
+  directories:
+    - data/
+after_success:
 - racket dth.rkt
 - cp build/today.html build/index.html
+
 deploy:
   provider: pages
   target-branch: gh-pages
