@@ -2,7 +2,9 @@
 
 (require "sync.rkt")
 
-(provide get-abbrs)
+(provide get-display)
+
+(define (zip l1 l2) (map list l1 l2))
 
 (define (get-team-id team)
   (hash-ref team 'id))
@@ -21,3 +23,15 @@
 
 (define (get-abbrs game)
   (map get-abbr (map get-team-id (get-teams game))))
+
+(define (get-img id)
+  (define sid (id->string id))
+  (get-img-fn sid))
+
+(define (get-imgs game)
+  (map get-img (map get-team-id (get-teams game))))
+
+(define (get-display game)
+  (define abbrs (get-abbrs game))
+  (define imgs (get-imgs game))
+  (zip abbrs imgs))

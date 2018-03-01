@@ -1,3 +1,4 @@
 *.html
+*.svg
 data/sched.json
 data/teams.json

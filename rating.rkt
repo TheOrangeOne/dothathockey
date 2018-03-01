@@ -94,7 +94,8 @@
   (define rating (rating-rating (hash-ref ratings id)))
   (define team (hash-ref teams id))
   (define abbr (hash-ref team 'abbreviation))
-  (list abbr rating))
+  (define src (get-img-fn id))
+  (list abbr rating src))
 
 
 (define team-ratings

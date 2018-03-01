@@ -5,16 +5,21 @@
 (require "api.rkt")
 (require "date.rkt")
 
-(provide schedule teams id->js)
+(provide schedule teams id->js id->string get-img-fn)
 
+(define DATA-DIR "data/")
+(define BUILD-DIR "build/")
 (define SEASON-START "2017-10-04")
 
 (define (id->js id)
   (cond [(symbol? id) id]
-        [(number? id)
-         (string->symbol (number->string id))]
-        [(string? id)
-         (string->symbol id)]))
+        [(number? id) (string->symbol (number->string id))]
+        [(string? id) (string->symbol id)]))
+
+(define (id->string id)
+  (cond [(symbol? id) (symbol->string id)]
+        [(number? id) (number->string id)]
+        [(string? id) id]))
 
 (define (parse-teams lteams [hteams (make-immutable-hash)])
   (if (empty? lteams)
@@ -28,7 +33,7 @@
   (define teams (hash-ref raw 'teams))
   (parse-teams teams))
 
-(define teams-file-name "data/teams.json")
+(define teams-file-name (~a DATA-DIR "teams.json"))
 (close-output-port (open-output-file teams-file-name #:exists 'append))
 (define teams-file-in (open-input-file teams-file-name))
 (define teams-cached (read-json teams-file-in))
@@ -38,7 +43,7 @@
 (write-json teams teams-file-out)
 (close-output-port teams-file-out)
 
-(define sched-file-name "data/sched.json")
+(define sched-file-name (~a DATA-DIR "sched.json"))
 (close-output-port (open-output-file sched-file-name #:exists 'append))
 (define sched-file-in (open-input-file sched-file-name))
 (define sched-raw (read-json sched-file-in))
@@ -79,3 +84,34 @@
 (define sched-file-out (open-output-file sched-file-name #:exists 'replace))
 (write-json schedule sched-file-out)
 (close-output-port sched-file-out)
+
+(define (get-img-fn id)
+  (~a id ".svg"))
+
+(define (get-img-data-path id)
+  (~a DATA-DIR (get-img-fn id)))
+
+(define (get-img-build-path id)
+  (~a DATA-DIR (get-img-fn id)))
+
+(define (fetch-img id)
+  (define svg (logo-get id))
+  (define img-file-data
+    (open-output-file (get-img-data-path id) #:exists 'replace))
+  (define img-file-build (open-output-file (get-img-build-path id) #:exists 'replace))
+  (write-string svg img-file-data)
+  (write-string svg img-file-build)
+  (close-output-port img-file-data)
+  (close-output-port img-file-build)
+  void)
+
+(define (get-img id)
+  (define img-file-name (get-img-data-path id))
+  (if (file-exists? img-file-name)
+    void
+    (fetch-img id)))
+
+(define (get-imgs ids) (map get-img ids))
+
+(define imgs (get-imgs (map id->string (hash-keys teams))))
+

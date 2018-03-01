@@ -30,4 +30,4 @@
 ; (define (is-top-team? id) (member id top-teams))
 
 
-(define games (map get-abbrs today-games))
+(define games (map get-display today-games))

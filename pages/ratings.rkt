@@ -11,13 +11,11 @@
 (define (html-rating data)
   (define abbr (first data))
   (define rating (format-rating (second data)))
-  (li (span rating nbsp (b abbr))))
+  (define src (third data))
+  (li (span (svg-team src) (b abbr) nbsp rating)))
 
 (define (html-ratings data)
-  (element
-    'ul
-    'style: "font-family: \"Lucida Console\", Monaco, monospace"
-    (map html-rating data)))
+  (element 'ul 'style: content-style (map html-rating data)))
 
 (define fn "ratings")
 (define src (div (h1 (~a "[" todayf "]" " ratings"))

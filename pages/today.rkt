@@ -7,14 +7,18 @@
 
 (provide today-page)
 
+(define (html-team team)
+  (define abbr (first team))
+  (define src (second team))
+  (element 'span (svg-team src) abbr))
+
 (define (html-game game)
-  (li (~a (first game) " at " (second game))))
+  (define home (html-team (first game)))
+  (define away (html-team (second game)))
+  (li home nbsp "at" nbsp away))
 
 (define (html-games games)
-  (element
-    'ul
-    'style: "font-family: \"Lucida Console\", Monaco, monospace"
-    (map html-game games)))
+  (element 'ul 'style: content-style (map html-game games)))
 
 ; (define (is-good-game? game)
 ;   (define homeid (hash-ref (first game) 'id))
