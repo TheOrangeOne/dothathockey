@@ -92,13 +92,25 @@
   (~a DATA-DIR (get-img-fn id)))
 
 (define (get-img-build-path id)
-  (~a DATA-DIR (get-img-fn id)))
+  (~a BUILD-DIR (get-img-fn id)))
+
+(define (restore-img id)
+  (define img-file-data
+    (open-input-file (get-img-data-path id)))
+  (define svg (port->string img-file-data))
+  (define img-file-build
+    (open-output-file (get-img-build-path id) #:exists 'replace))
+  (write-string svg img-file-build)
+  (close-input-port img-file-data)
+  (close-output-port img-file-build)
+  void)
 
 (define (fetch-img id)
   (define svg (logo-get id))
   (define img-file-data
     (open-output-file (get-img-data-path id) #:exists 'replace))
-  (define img-file-build (open-output-file (get-img-build-path id) #:exists 'replace))
+  (define img-file-build
+    (open-output-file (get-img-build-path id) #:exists 'replace))
   (write-string svg img-file-data)
   (write-string svg img-file-build)
   (close-output-port img-file-data)
@@ -108,7 +120,7 @@
 (define (get-img id)
   (define img-file-name (get-img-data-path id))
   (if (file-exists? img-file-name)
-    void
+    (restore-img id)
     (fetch-img id)))
 
 (define (get-imgs ids) (map get-img ids))
