@@ -1,65 +1,25 @@
 language: c
-
-# To use Travis CI's newer container infrastructure, use the following
-# line. (Also be sure RACKET_DIR is set to somewhere like ~/racket
-# that doesn't require sudo.)
 sudo: false
-
 env:
   global:
-    # Supply a global RACKET_DIR environment variable. This is where
-    # Racket will be installed. A good idea is to use ~/racket because
-    # that doesn't require sudo to install and is therefore compatible
-    # with Travis CI's newer container infrastructure.
-    - RACKET_DIR=~/racket
+  - RACKET_DIR=~/racket
+  - secure: J0aCr0ugmD+KU3iPdafYcJrIuPM9rWH+kvdhjWFuC87pzgqdU06KUKLFcgpWmSCMqlqN00l6VlEV4dTP42dhFt/mRxb4TYT88Z5ektpnITn73GkhRhFC+07ju/GarUNgkT42jV7poyqtWmHzWAmLNKZGDfbJk22+iMu7YawrSNmxP6XswhFhhXhVrb+0E6EE2Zzp+jeXsywgQ0Lyy0p6ZBbqB9alQs5oy9wwId6iYysVyUVvKcfrVzKcA8hBFBFyx/4Co1aHXstXu9FOw3xk3aEGbOl1Rb94ky/LDj83flOMHZSekc7LGHjOwbkLzCv384LOHRSYu+elcrNWk4X6iPZgPElmudeMrzOWHVZoPD/qY92zppIzXhGaJF1J8k0MYbQrg1eqfrgZ/59pMiRk4OPuAcY+NU5sptJ1zk57KP1MyG+uPIMlzxH1cioFNVCHBI6JYDf77odrCO0SFJAYZi+e+pWGI1amOfBEFkA01NcbrRKnHRgFxGyVuiFtlrrIlzmZIYsRXcYSWD/FTTRKadbFQx/ZboyDSP4uIvyx5w8sIIomuRXDiIH9qP0rZ5Z5hX7bvF1qMGg4rdkjSQ/gtsTUuaMfsQKFygTufd5eITeyX5lpw3oUxQU+a8KQead+BK9OgnwngDWhXQ25h7jx2lW7YIuuBy0Gc0zAoDF1PgU=
   matrix:
-    # Supply at least one RACKET_VERSION environment variable. This is
-    # used by the install-racket.sh script (run at before_install,
-    # below) to select the version of Racket to download and install.
-    #
-    # Supply more than one RACKET_VERSION (as in the example below) to
-    # create a Travis-CI build matrix to test against multiple Racket
-    # versions.
-    #
-    # The RELEASE snapshot is only available during the release process.
-    - RACKET_VERSION=6.10
-    - RACKET_VERSION=HEAD
-    - RACKET_VERSION=RELEASE
-
-# You may want to test against certain versions of Racket, without
-# having them count against the overall success/failure.
-matrix:
-  allow_failures:
-    - env: RACKET_VERSION=HEAD
-    - env: RACKET_VERSION=RELEASE
-  # Fast finish: Overall build result is determined as soon as any of
-  # its rows have failed, or, all of its rows that aren't allowed to
-  # fail have succeeded.
+  - RACKET_VERSION=6.10
   fast_finish: true
-
-
 before_install:
-  - git clone https://github.com/greghendershott/travis-racket.git
-  - cat travis-racket/install-racket.sh | bash # pipe to bash not sh!
-  - export PATH="${RACKET_DIR}/bin:${PATH}" #install-racket.sh can't set for us
-
-install:
-
-before_script:
-
-# Here supply steps such as raco make, raco test, etc.
+- git clone https://github.com/greghendershott/travis-racket.git
+- cat travis-racket/install-racket.sh | bash
+- export PATH="${RACKET_DIR}/bin:${PATH}"
 script:
-  - racket dth.rkt
-
-after_success:
-  - bash push.sh
-
-# OR: If your repo is a Racket package with an info.rkt that includes
-# some `deps`:
-#
-# script:
-# - raco pkg install --deps search-auto
-# - raco setup -D --check-pkg-deps <your-package-name>
-# - raco test -x -p <your-package-name>
-
-after_script:
+- racket dth.rkt
+- cp build/today.html build/index.html
+deploy:
+  provider: pages
+  target-branch: gh-pages
+  skip-cleanup: true
+  github-token: $GH_TOKEN
+  keep-history: true
+  local-dir: build
+  on:
+    branch: master
