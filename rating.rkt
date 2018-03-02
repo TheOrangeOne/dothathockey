@@ -3,14 +3,21 @@
 (require json)
 (require "sync.rkt")
 
-(provide ratings team-ratings format-rating)
+(provide ratings team-ratings format-rating get-rating)
 
 (define-struct team   (id score gp)   #:transparent)
 (define-struct match  (home away res) #:transparent)
 (define-struct rating (id rating gp)  #:transparent)
 
+(define MAX-RATING 1650)
+(define MIN-RATING 1400)
+
+(define (normalize-rating rating)
+  (/ (- rating MIN-RATING) (- MAX-RATING MIN-RATING)))
+
 (define (format-rating rating)
-  (real->decimal-string (/ rating 100) 3))
+  (real->decimal-string (* (normalize-rating rating) 100) 2))
+  ;(real->decimal-string (/ rating 10) 2))
 
 (define (parse-team team-blob)
   (define score (hash-ref team-blob 'score))
@@ -90,13 +97,15 @@
 (define matches (flatten (map get-matches schedule)))
 (define ratings (gen-ratings matches))
 
+(define (get-rating id)
+  (format-rating (rating-rating (hash-ref ratings id))))
+
 (define (team-rating id)
   (define rating (rating-rating (hash-ref ratings id)))
   (define team (hash-ref teams id))
   (define abbr (hash-ref team 'abbreviation))
   (define src (get-img-fn id))
   (list abbr rating src))
-
 
 (define team-ratings
   (sort (map team-rating (hash-keys teams)) > #:key (lambda (x) (second x))))

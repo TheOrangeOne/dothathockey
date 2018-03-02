@@ -15,7 +15,7 @@
   (li (span (svg-team src) (b abbr) nbsp rating)))
 
 (define (html-ratings data)
-  (element 'ul 'style: content-style (map html-rating data)))
+  (element 'ol 'style: content-style (map html-rating data)))
 
 (define fn "ratings")
 (define src (div (h1 (~a "[" todayf "]" " ratings"))

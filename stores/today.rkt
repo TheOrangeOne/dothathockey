@@ -2,9 +2,10 @@
 
 (require json)
 (require "../sync.rkt")
+(require "../rating.rkt")
 (require "../team.rkt")
 
-(provide games)
+(provide games close-games)
 
 (define today-sched (last schedule))
 (define today-num-games (hash-ref today-sched 'totalGames))
@@ -29,5 +30,21 @@
 
 ; (define (is-top-team? id) (member id top-teams))
 
+(define (get-display game)
+  (define match (game->ids game))
+  (define ids (flatten match))
+  (define dids
+    (map (lambda (id)
+           (list (get-abbr id)
+                 (get-rating id)
+                 (get-img id))) ids))
+  (list (first dids) (second dids)))
+
+(define (is-close-game? game)
+  (define home-rating (string->number (second (first game))))
+  (define away-rating (string->number (second (second game))))
+  (< (abs (- home-rating away-rating)) 10))
+
 
 (define games (map get-display today-games))
+(define close-games (filter is-close-game? games))
