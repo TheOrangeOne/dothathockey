@@ -4,5 +4,5 @@
 (require "pages/today.rkt")
 (require "pages/ratings.rkt")
 
-(define pages (list today-page ratings-page))
+(define pages (append (list today-page cur-ratings-page) rating-pages))
 (output-pages pages)

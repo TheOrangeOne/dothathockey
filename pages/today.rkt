@@ -30,6 +30,7 @@
 
 
 (define fn "today")
+(define title "today")
 (define src (div (h1 "today's games")
                   (html-games games)
                   (h1 "close-ish games")
@@ -37,4 +38,4 @@
                   ; (h1 "Good games:")
                   ;(html-games good-games)))
 
-(define today-page (make-page src fn))
+(define today-page (make-page src title fn))

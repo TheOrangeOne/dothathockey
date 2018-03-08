@@ -1,10 +1,32 @@
 #lang racket
 
+(require racket/date)
+
 (provide todayf
-         today)
+         today
+         date-prev
+         date-next)
 
 (define (-day time)
   (- time (* 24 60 60 )))
+
+(define (+day time)
+  (+ time (* 24 60 60 )))
+
+(define (string->time date)
+  (define split (map string->number (string-split date "-")))
+  (define year (first split))
+  (define month (second split))
+  (define day (third split))
+  (find-seconds 0 0 0 day month year))
+
+(define (date-prev date)
+  (define date-time (string->time date))
+  (fdate (seconds->date (-day date-time))))
+
+(define (date-next date)
+  (define date-time (string->time date))
+  (fdate (seconds->date (+day date-time))))
 
 (define (pad-date d)
   (~a d #:align 'right #:min-width 2 #:left-pad-string "0"))

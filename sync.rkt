@@ -5,7 +5,7 @@
 (require "api.rkt")
 (require "date.rkt")
 
-(provide schedule teams id->js id->string get-img-fn)
+(provide schedule game-days teams id->js id->string get-img-fn)
 
 (define DATA-DIR "data/")
 (define BUILD-DIR "build/")
@@ -55,11 +55,17 @@
     empty
     (cons (hash-ref (first sched) 'date) (parse-dates (rest sched)))))
 
+(define (parse-dates-hash sched)
+  (if (empty? sched)
+    (make-immutable-hash)
+    (hash-set (parse-dates-hash (rest sched)) (hash-ref (first sched) 'date) "")))
+
 ; get the start date for the range of data we need to request
 (define (get-start-date dates)
   (if (empty? dates)
     SEASON-START
     (last dates)))
+
 
 ; assume cached and part both sorted ascending
 (define (merge-sched cached part)
@@ -79,6 +85,8 @@
 
 (define schedule (update-sched cached-sched))
 ; (define schedule cached-sched)
+
+(define game-days (parse-dates-hash schedule))
 
 ; output the schedule to file
 (define sched-file-out (open-output-file sched-file-name #:exists 'replace))

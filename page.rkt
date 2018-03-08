@@ -5,9 +5,9 @@
 
 (provide make-page output-pages svg-team content-style)
 
-(define-struct page (src fn))
+(define-struct page (src title fn))
 
-(define content-style "font-size: 1.2em; font-family: \"Lucida Console\", Monaco, monospace; line-height: 1.5;")
+(define content-style "font-size: 1.1em; font-family: \"Lucida Console\", Monaco, monospace; line-height: 1.5;")
 
 (define meta-mobile
   (element 'meta 'name: "viewport" 'content: "width=device-width,initial-scale=1"))
@@ -15,7 +15,7 @@
 (define (svg-team src)
   (element
     'img
-    'style: "width: 1.2em; margin-right: 0.2em; vertical-align: middle;"
+    'style: "width: 1.1em; margin-right: 0.2em; vertical-align: middle;"
     'src: src))
 
 (define (wrap-src src header)
@@ -26,7 +26,7 @@
 (define (gen-header pages)
   (if (empty? pages)
     empty
-    (let* ([name (page-fn (first pages))]
+    (let* ([name (page-title (first pages))]
            [href (~a name ".html")])
       (span (element 'a 'href: href name) nbsp (gen-header (rest pages))))))
 
