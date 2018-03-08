@@ -18,6 +18,8 @@ script:
 - racket dth.rkt
 - cp build/today.html build/index.html
 deploy:
+  edge:
+    branch: v1.8.47
   provider: pages
   target-branch: gh-pages
   skip-cleanup: true
