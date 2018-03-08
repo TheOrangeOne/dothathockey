@@ -83,8 +83,8 @@
   (define part-sched (hash-ref part 'dates empty))
   (merge-sched cached-sched part-sched))
 
-(define schedule (update-sched cached-sched))
-; (define schedule cached-sched)
+; (define schedule (update-sched cached-sched))
+(define schedule cached-sched)
 
 (define game-days (parse-dates-hash schedule))
 

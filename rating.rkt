@@ -19,7 +19,7 @@
 (define-struct match  (home away res) #:transparent)
 (define-struct rating (id rating gp diff)  #:transparent)
 
-(define MAX-RATING 1650)
+(define MAX-RATING 1600)
 (define MIN-RATING 1400)
 
 (define (normalize-rating rating)
@@ -123,12 +123,22 @@
     (let ((newratings (gen-rating (first matches) ratings)))
       (gen-ratings (rest matches) newratings))))
 
+(define (remove-diffs ratings [keys (hash-keys ratings)])
+  (if (empty? keys)
+    (make-immutable-hash)
+    (let* ((rrating (hash-ref ratings (first keys)))
+           (rating (rating-rating rrating))
+           (id (rating-id rrating))
+           (gp (rating-gp rrating)))
+      (hash-set (remove-diffs ratings (rest keys)) (first keys) (make-rating id rating gp 0)))))
+
 (define (gen-daily-rating date-match daily-ratings)
   (define date (first date-match))
   (define prev-date (get-prev-game-day date))
   (define matches (second date-match))
   (define prev-ratings (hash-ref daily-ratings prev-date (make-immutable-hash)))
-  (define ratings (gen-ratings matches prev-ratings))
+  (define rm-diff-ratings (remove-diffs prev-ratings))
+  (define ratings (gen-ratings matches rm-diff-ratings))
   (hash-set daily-ratings date ratings))
 
 (define (gen-daily-ratings date-matches [daily-ratings (make-immutable-hash)])

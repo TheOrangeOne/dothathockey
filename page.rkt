@@ -7,7 +7,11 @@
 
 (define-struct page (src title fn))
 
-(define content-style "font-size: 1.1em; font-family: \"Lucida Console\", Monaco, monospace; line-height: 1.5;")
+(define site-style (style "body{margin:40px
+auto;max-width:650px;line-height:1.6;font-size:18px;color:#444;padding:0
+10px}h1,h2,h3{line-height:1.2}</style>"))
+
+(define content-style "font-size: 1.1em; font-family: \"Lucida Console\", Monaco, monospace; line-height: 1.5; list-style-type: none;")
 
 (define meta-mobile
   (element 'meta 'name: "viewport" 'content: "width=device-width,initial-scale=1"))
@@ -20,8 +24,8 @@
 
 (define (wrap-src src header)
   (element 'html 'lang: "en"
-           (head (title "DTH") meta-mobile)
-           (body header src)))
+           (head (title "DTH") meta-mobile site-style)
+           (element 'body 'style: "text-align: center;" header src)))
 
 (define (gen-header pages)
   (if (empty? pages)
@@ -39,5 +43,5 @@
   (close-output-port file))
 
 (define (output-pages pages)
-  (define header (gen-header pages))
+  (define header (gen-header (filter (lambda (x) (not (string=? (page-title x) ""))) pages)))
   (void (map (curry output-page header) pages)))

@@ -4,30 +4,24 @@
 (require scribble/html/xml)
 (require "../page.rkt")
 (require "../stores/today.rkt")
+(require "ratings.rkt")
 
 (provide today-page)
+
 
 (define (html-team team)
   (define abbr (first team))
   (define rating (second team))
   (define src (third team))
-  (element 'span (svg-team src) abbr (~a "(" rating ")")))
+  (element 'span (svg-team src) abbr nbsp (html-grad-rating rating)))
 
 (define (html-game game)
   (define home (html-team (first game)))
   (define away (html-team (second game)))
-  (li away nbsp "at" nbsp home))
+  (div away nbsp "at" nbsp home))
 
 (define (html-games games)
-  (element 'ul 'style: content-style (map html-game games)))
-
-; (define (is-good-game? game)
-;   (define homeid (hash-ref (first game) 'id))
-;   (define awayid (hash-ref (second game) 'id))
-;   (and (is-top-team? homeid) (is-top-team? awayid)))
-;
-; (define good-games (filter is-good-game? games))
-
+  (element 'div 'style: content-style (map html-game games)))
 
 (define fn "today")
 (define title "today")
