@@ -8,6 +8,7 @@ env:
   - RACKET_VERSION=6.10
   fast_finish: true
 before_install:
+- export TZ=America/Toronto
 - git clone https://github.com/greghendershott/travis-racket.git
 - cat travis-racket/install-racket.sh | bash
 - export PATH="${RACKET_DIR}/bin:${PATH}"
