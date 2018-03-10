@@ -51,7 +51,10 @@
 
 (define (get-match game)
   (define linescore (hash-ref game 'linescore))
-  (define period (hash-ref linescore 'currentPeriodOrdinal "-"))
+  (define status (hash-ref linescore 'currentPeriodTimeRemaining ""))
+  (define nperiod (hash-ref linescore 'currentPeriod 0))
+  ; if the game isn't over then set period to 0
+  (define period (if (string=? status "Final") nperiod 0))
   (define teams (hash-ref game 'teams))
   (define home (parse-team (hash-ref teams 'home)))
   (define away (parse-team (hash-ref teams 'away)))
@@ -79,11 +82,11 @@
   (define res (match-res match))
   (define home-score (team-score (match-home match)))
   (define away-score (team-score (match-away match)))
-  (cond [(string=? res "SO")
+  (cond [(= res 5)
          (values 0.5 0.5)]
-        [(and (string=? res "OT") (> home-score away-score))
+        [(and (= res 4) (> home-score away-score))
          (values 0.6 0.4)]
-        [(and (string=? res "OT") (< home-score away-score))
+        [(and (= res 4) (< home-score away-score))
          (values 0.4 0.6)]
         [(> home-score away-score)
          (values 1 0)]
@@ -102,7 +105,7 @@
 (define IR 1500)
 (define GP 0)
 (define (gen-rating match ratings)
-  (if (string=? (match-res match) "-")
+  (if (= (match-res match) 0)
     ratings
     (let*-values
           ([(home) (match-home match)]
