@@ -9,7 +9,7 @@
 
 (define DATA-DIR "data/")
 (define BUILD-DIR "build/")
-(define SEASON-START "2018-10-04")
+(define SEASON-START "2018-10-03")
 
 (define (id->js id)
   (cond [(symbol? id) id]
