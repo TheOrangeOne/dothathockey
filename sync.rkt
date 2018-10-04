@@ -5,7 +5,7 @@
 (require "api.rkt")
 (require "date.rkt")
 
-(provide schedule game-days teams id->js id->string get-img-fn)
+(provide schedule game-days teams teams-has-id? id->js id->string get-img-fn)
 
 (define DATA-DIR "data/")
 (define BUILD-DIR "build/")
@@ -135,3 +135,6 @@
 
 (define imgs (get-imgs (map id->string (hash-keys teams))))
 
+(define (teams-has-id? id)
+  (unless (symbol? id) (error "invalid id type"))
+  (hash-has-key? teams id))

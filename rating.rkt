@@ -154,8 +154,8 @@
 (define (valid-match? match)
   (define home-id (team-id (match-home match)))
   (define away-id (team-id (match-away match)))
-  (and (hash-has-key? teams home-id)
-       (hash-has-key? teams away-id)))
+  (and (teams-has-id? (string->symbol (number->string home-id)))
+       (teams-has-id? (string->symbol (number->string away-id)))))
 (define valid-matches (filter valid-match? matches))
 (define ratings (gen-ratings valid-matches))
 

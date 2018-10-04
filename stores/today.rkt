@@ -13,8 +13,8 @@
 
 (define (valid-game? game)
   (define match (game->ids game))
-  (and (hash-has-key? teams (first match))
-       (hash-has-key? teams (second match))))
+  (and (teams-has-id? (first match))
+       (teams-has-id? (second match))))
 
 (define valid-today-games (filter valid-game? today-games))
 
