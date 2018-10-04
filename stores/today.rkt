@@ -11,6 +11,13 @@
 (define today-num-games (hash-ref today-sched 'totalGames))
 (define today-games (hash-ref today-sched 'games))
 
+(define (valid-game? game)
+  (define match (game->ids game))
+  (and (hash-has-key? teams (first match))
+       (hash-has-key? teams (second match))))
+
+(define valid-today-games (filter valid-game? today-games))
+
 (define (strip-chars str chars)
   (list->string (remove* (string->list chars) (string->list str))))
 
@@ -45,6 +52,5 @@
   (define away-rating (string->number (second (second game))))
   (< (abs (- home-rating away-rating)) 10))
 
-
-(define games (map get-display today-games))
+(define games (map get-display valid-today-games))
 (define close-games (filter is-close-game? games))

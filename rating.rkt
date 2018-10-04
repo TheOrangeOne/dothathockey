@@ -151,13 +151,19 @@
       (gen-daily-ratings (rest date-matches) newratings))))
 
 (define matches (flatten (map get-matches schedule)))
-(define ratings (gen-ratings matches))
+(define (valid-match? match)
+  (define home-id (team-id (match-home match)))
+  (define away-id (team-id (match-away match)))
+  (and (hash-has-key? teams home-id)
+       (hash-has-key? teams away-id)))
+(define valid-matches (filter valid-match? matches))
+(define ratings (gen-ratings valid-matches))
 
 (define date-matches (map get-date-matches schedule))
 (define daily-ratings (gen-daily-ratings date-matches))
 
 (define (get-rating id)
-  (format-rating (rating-rating (hash-ref ratings id))))
+  (format-rating (rating-rating (hash-ref ratings id (make-rating 0 IR 0 IR)))))
 
 (define (team-rating ratings id)
   (define rating (hash-ref ratings id (make-rating 0 IR 0 IR)))
