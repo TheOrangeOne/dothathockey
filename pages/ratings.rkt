@@ -35,7 +35,7 @@
   (define diff-style
     (cond [(> diff 0) "color: green;"]
           [(< diff 0) "color: red;"]))
-  (if (= diff 0) empty (element 'span 'style: diff-style (~a fmt-diff))))
+  (if (or (= diff 0) (= diff 1500)) empty (element 'span 'style: diff-style (~a fmt-diff))))
 
 (define table-style "font-size: 1.1em; font-family: \"Lucida Console\", Monaco, monospace; line-height: 1.5; margin-left:auto; margin-right:auto;")
 (define (ttd x) (element 'td 'style: "padding-left: 10px; padding-right: 10px" x))
